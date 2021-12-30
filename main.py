@@ -32,10 +32,17 @@ plt.show()
 plt.scatter(df['registration_year'], df['odometer_km'])
 plt.show()
 quantitative = [f for f in df.columns if df.dtypes[f] != 'object']
+
 facet = pd.melt(df, value_vars=quantitative)
 z = sns.FacetGrid(facet, col="variable", col_wrap=2, sharex=False, sharey="False")
 z = z.map(sns.distplot, "value")
 plt.show()
+
+for q in quantitative:
+    for q2 in quantitative:
+        value = df[q].corr(df[q2])
+        if q != q2 and (value > 0.1 or value < -0.1):
+            print("{q} correlates to {q2} with a value of {v:.2f}".format(q=q, q2=q2, v=value))
 # print(df["registration_year"].unique())
 # print(df['date_created'].unique())
 # print(df['date_crawled'].value_counts(dropna=False))
